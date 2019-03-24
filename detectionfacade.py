@@ -31,8 +31,9 @@ def execute_detection_url(url):
 @app.route('/api/v1.0/detectionfacade/content-based/news/<string:news>', methods=['GET'])
 def execute_detection_news(news):
     detection_result = preprocess_detect(news)
-    ner, subjectivity, sentiment, topic, influencer = semantics(news)
+    #ner, subjectivity, sentiment, topic, influencer = semantics(news)
     print(news)
+    #return jsonify({'news': news, 'detection_result': detection_result, 'ner': ner, 'subjectivity': subjectivity, 'sentiment': sentiment, 'topic': topic, 'influencer': influencer})
     return jsonify({'news': news, 'detection_result': detection_result})
 
 
