@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template
-from system import inputprocessing, detection, extractor, search, semantic
+from system import inputprocessing, detection, extractor, search
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 from keras import backend as K
