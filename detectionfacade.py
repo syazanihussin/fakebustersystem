@@ -45,8 +45,7 @@ def preprocess_detect(news):
     print(news)
     detection_obj = detection.Detection()
     results = detection_obj.detect_fake_news('content', padded_texts, news)
-	K.clear_session()
-	
+    K.clear_session()
     return results
 
 
