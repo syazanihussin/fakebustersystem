@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>F L U X</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icons/favicon.ico')}}"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}">
+<!--===============================================================================================-->
+	<script src="{{ url_for('static', filename='vendor/jquery/jquery-3.2.1.min.js')}}"></script>
+<!--===============================================================================================-->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/util.css')}}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css')}}">
+
+	<script>
+		$(document).ready(function(){
+			$("#semak-berita").click(function(){
+				var news = $('#news-content').val();
+
+				if(news.trim() === ""){
+					alert("Pastikan anda memasukkan berita");
+				} else {
+
+					var news = news.replace('?', ' ')
+
+					$.ajax({
+						url:"/api/v1.0/detectionfacade/content-based/news/" + news,
+						type: "GET",
+						success:function(data){
+							$(".result-berita").show()
+							$(".berita").hide()
+							keputusan(data)
+						}
+					});
+				}
+			});
+
+			$("#semak-url").click(function(){
+				var url = $('#url-content').val();
+
+				if(url.trim() === ""){
+					alert("Pastikan anda memasukkan url laman web");
+				} else {
+
+					var encodedURL = btoa(url);
+
+					$.ajax({
+						url:"/api/v1.0/detectionfacade/content-based/url/" + encodedURL,
+						type: "GET",
+						success:function(data){
+							if(data.hasOwnProperty('error')){
+								alert(data['error'])
+							} else {
+								$(".result-url").show()
+								$(".url").hide()
+								keputusan(data)
+							}
+						}
+					});
+				}
+			});
+		});
+
+	</script>
+
+	<style>
+  /* Tooltip */
+  .test + .tooltip > .tooltip-inner {
+    background-color: #73AD21;
+    color: #FFFFFF;
+    border: 1px solid green;
+    padding: 15px;
+    font-size: 20px;
+  }
+  /* Tooltip on top */
+  .test + .tooltip.top > .tooltip-arrow {
+    border-top: 5px solid green;
+  }
+  /* Tooltip on bottom */
+  .test + .tooltip.bottom > .tooltip-arrow {
+    border-bottom: 5px solid blue;
+  }
+  /* Tooltip on left */
+  .test + .tooltip.left > .tooltip-arrow {
+    border-left: 5px solid red;
+  }
+  /* Tooltip on right */
+  .test + .tooltip.right > .tooltip-arrow {
+    border-right: 5px solid black;
+  }
+  </style>
+
+</head>
+
+<body>
+
+	<div class="container-contact100">
+		<div class="contact100-map" style="background-image: url({{ url_for('static', filename='images/bg-01.jpg')}});"></div>
+		<div class="wrap-contact100">
+			<div class="contact100-form validate-form">
+				<span class="contact100-form-title"> F L U X </span>
+				<h6 style="font-size: 15px;">Semak berita sebelum kongsi</h6>
+
+				<div class="wrapper">
+					<nav class="tabs">
+						<div class="selector"></div>
+						<a href="#" id="berita" class="active"> Berita </a>
+						<a href="#" id="url"> URL </a>
+					</nav>
+
+					<div class="berita">
+						<div class="wrap-input100" data-validate = "Sila masukkan berita yang ingin disemak">
+							<textarea id="news-content" class="input100" name="message" placeholder="Sila masukkan berita yang ingin disemak"></textarea>
+							<span class="focus-input100"></span>
+						</div>
+
+						<div class="container-contact100-form-btn">
+							<button id="semak-berita" class="contact100-form-btn">Semak Berita</button>
+						</div>
+					</div>
+
+					<div class="result-berita hidden">
+						<div style="padding: 50px 0px 50px 0px;">
+							<div>
+								<p style='font-size: 18px; color: black;'><b class="news"></b></p>
+							</div>
+
+							<div style="padding: 40px 0px 0px 0px; text-align: left;">
+								<h4 style="font-size: 18px; text-align: left;" class="label"></h4>
+								<h4 style="font-size: 18px; text-align: left;" class="label2"></h4>
+								<h4 style="font-size: 18px; text-align: left;" class="label3"></h4>
+								<h4 style="font-size: 18px; text-align: left;" class="label4"></h4>
+							</div>
+							<div style="padding: 40px 0px 0px 0px; text-align: left;">
+								<h4 style="font-size: 18px; text-align: left;" class="subjectivity"></h4>
+								<h4 style="font-size: 18px; text-align: left;" class="sentiment"></h4>
+								<h4 style="font-size: 18px; text-align: left;" class="topic"></h4>
+								<h4 style="font-size: 18px; text-align: left;" class="influencer"></h4>
+							</div>
+						</div>
+
+						<div class="container-contact100-form-btn">
+							<h6 id="back-berita"><i class="fa fa-arrow-left"></i> Kembali</h6>
+						</div>
+					</div>
+
+					<div class="url hidden">
+						<div class="wrap-input100" data-validate = "Sila masukkan url laman web berita yang ingin disemak">
+							<textarea id="url-content" class="input100" name="message" placeholder="Sila masukkan url laman web yang ingin disemak"></textarea>
+							<span class="focus-input100"></span>
+						</div>
+
+						<div class="container-contact100-form-btn">
+							<button id="semak-url" class="contact100-form-btn">Semak URL</button>
+						</div>
+					</div>
+
+					<div class="result-url hidden">
+						<div style="padding: 50px 0px 50px 0px;">
+							<div>
+								<p style='font-size: 18px; color: black;'><b class="news"></b></p>
+							</div>
+
+							<div style="padding: 40px 0px 0px 0px; text-align: left;">
+								<h4 style="font-size: 18px; text-align: left;" class="label"></h4>
+								<h4 style="font-size: 18px; text-align: left;" class="label2"></h4>
+								<h4 style="font-size: 18px; text-align: left;" class="label3"></h4>
+								<h4 style="font-size: 18px; text-align: left;" class="label4"></h4>
+							</div>
+							<div style="padding: 40px 0px 0px 0px; text-align: left;">
+								<h4 style="font-size: 18px; text-align: left;" class="subjectivity"></h4>
+								<h4 style="font-size: 18px; text-align: left;" class="sentiment"></h4>
+								<h4 style="font-size: 18px; text-align: left;" class="topic"></h4>
+								<h4 style="font-size: 18px; text-align: left;" class="influencer"></h4>
+							</div>
+						</div>
+
+						<div class="container-contact100-form-btn">
+							<h6 id="back-url"><i class="fa fa-arrow-left"></i> Kembali</h6>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!--===============================================================================================-->
+	<script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.min.js')}}"></script>
+<!--===============================================================================================-->
+	<script src="{{ url_for('static', filename='js/main.js')}}"></script>
+<!--===============================================================================================-->
+	<script src="{{ url_for('static', filename='js/scripts.js')}}"></script>
+<!--===============================================================================================-->
+	<script type="text/javascript">
+		$("#berita").click(function(){
+			$(".berita").show();
+			$(".url").hide();
+			$(".result-berita").hide()
+			$(".result-url").hide()
+		});
+
+		$("#url").click(function(){
+			$(".url").show();
+			$(".berita").hide();
+			$(".result-berita").hide()
+			$(".result-url").hide()
+		});
+
+		$("#back-berita").click(function(){
+			$(".berita").show();
+			$(".result-berita").hide()
+		});
+
+		$("#back-url").click(function(){
+			$(".url").show();
+			$(".result-url").hide()
+		});
+	</script>
+<!--===============================================================================================-->
+	<script type="text/javascript">
+		function keputusan(data) {
+			if(data['detection_result']['svm']['label'] === "Real") {
+				$(".label").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-success' style='display:inline-block; width:150px'>Keputusan SVM</span> Sahih dengan kebarangkalian " + (parseFloat(data['detection_result']['svm']['real_prob']) * 100).toFixed(2) + "%</p>");
+			} else {
+				$(".label").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-danger' style='display:inline-block; width:150px'>Keputusan SVM</span> Palsu dengan kebarangkalian " + (parseFloat(data['detection_result']['svm']['fake_prob']) * 100).toFixed(2) + "%</p>");
+			}
+
+			if(data['detection_result']['lr']['label'] === "Real") {
+				$(".label2").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-success' style='display:inline-block; width:150px'>Keputusan LR</span> Sahih dengan kebarangkalian " + (parseFloat(data['detection_result']['lr']['real_prob']) * 100).toFixed(2) + "%</p>");
+			} else {
+				$(".label2").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-danger' style='display:inline-block; width:150px'>Keputusan LR</span> Palsu dengan kebarangkalian " + (parseFloat(data['detection_result']['lr']['fake_prob']) * 100).toFixed(2) + "%</p>");
+			}
+
+			if(data['detection_result']['knn']['label'] === "Real") {
+				$(".label3").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-success' style='display:inline-block; width:150px'>Keputusan KNN</span> Sahih dengan kebarangkalian " + (parseFloat(data['detection_result']['knn']['real_prob']) * 100).toFixed(2) + "%</p>");
+			} else {
+				$(".label3").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-danger' style='display:inline-block; width:150px'>Keputusan KNN</span> Palsu dengan kebarangkalian " + (parseFloat(data['detection_result']['knn']['fake_prob']) * 100).toFixed(2) + "%</p>");
+			}
+
+			if(data['detection_result']['cnn_gru']['label'] === "Real") {
+				$(".label4").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-success' style='display:inline-block; width:150px'>Keputusan CNN-GRU</span> Sahih dengan kebarangkalian " + (parseFloat(data['detection_result']['cnn_gru']['real_prob']) * 100).toFixed(2) + "%</p>");
+			} else {
+				$(".label4").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-danger' style='display:inline-block; width:150px'>Keputusan CNN-GRU</span> Palsu dengan kebarangkalian " + (parseFloat(data['detection_result']['cnn_gru']['fake_prob']) * 100).toFixed(2) + "%</p>");
+			}
+
+			semantics(data);
+		}
+
+		function semantics(data) {
+
+			news_array = data['news'].split(" ");
+			var ner = '';
+
+			for (index = 0; index < news_array.length; ++index) {
+
+				if(jQuery.inArray(news_array[index].toLowerCase().replace(/[^\w\s]|_/g, ""), data['ner']['law']) !== -1){
+					ner += "<span class='test' style='color: #e53935' data-toggle='tooltip' title='undang-undang'> " + news_array[index] + " </span>";
+				}
+				else if(jQuery.inArray(news_array[index].toLowerCase().replace(/[^\w\s]|_/g, ""), data['ner']['location']) !== -1){
+					ner += "<span class='test' style='color: #ab47bc' data-toggle='tooltip' title='lokasi'> " + news_array[index] + " </span>";
+				}
+				else if(jQuery.inArray(news_array[index].toLowerCase().replace(/[^\w\s]|_/g, ""), data['ner']['organization']) !== -1){
+					ner += "<span class='test' style='color: #42a5f5' data-toggle='tooltip' title='organisasi'> " + news_array[index] + " </span>";
+				}
+				else if(jQuery.inArray(news_array[index].toLowerCase().replace(/[^\w\s]|_/g, ""), data['ner']['person']) !== -1){
+					console.log(news_array[index].toLowerCase().replace(/[^\w\s]|_/g, ""));
+					console.log(data['ner']['person']);
+					ner += "<span class='test' style='color: #009688' data-toggle='tooltip' title='individu'> " + news_array[index] + " </span>";
+				}
+				else if(jQuery.inArray(news_array[index].toLowerCase().replace(/[^\w\s]|_/g, ""), data['ner']['quantity']) !== -1){
+					ner += "<span class='test' style='color: #ffeb3b' data-toggle='tooltip' title='kuantiti'> " + news_array[index] + " </span>";
+				}
+				else if(jQuery.inArray(news_array[index].toLowerCase().replace(/[^\w\s]|_/g, ""), data['ner']['time']) !== -1){
+					ner += "<span class='test' style='color: #ff9800' data-toggle='tooltip' title='masa'> " + news_array[index] + " </span>";
+				}
+				else if(jQuery.inArray(news_array[index].toLowerCase().replace(/[^\w\s]|_/g, ""), data['ner']['event']) !== -1){
+					ner += "<span class='test' style='color: #78909c' data-toggle='tooltip' title='peristiwa'> " + news_array[index] + " </span>";
+				}
+				else {
+					ner += "<span> " + news_array[index] + " </span>";
+				}
+			}
+
+			$(".news").html(ner);
+
+			if(data['subjectivity'] == 'positive') {
+				$(".subjectivity").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-success' style='display:inline-block; width:150px'>Subjectiviti</span> Penyataan tersebut adalah pendapat </p>");
+			} else if(data['subjectivity'] == 'negative') {
+				$(".subjectivity").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-success' style='display:inline-block; width:150px'>Subjectiviti</span> Penyataan tersebut adalah berita  </p>");
+			}
+
+			if(data['sentiment'] == 'positive') {
+				$(".sentiment").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-success' style='display:inline-block; width:150px'>Sentimen</span> Positif </p>");
+			} else if(data['sentiment'] == 'negative') {
+				$(".sentiment").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-danger' style='display:inline-block; width:150px'>Sentimen</span> Negatif  </p>");
+			}
+
+			var topic = data['topic'].join(', ');
+			if(data['topic'] === undefined || data['topic'].length == 0){
+				$(".topic").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-success' style='display:inline-block; width:150px'>Topik</span> Tiada  </p>");
+			} else {
+				$(".topic").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-success' style='display:inline-block; width:150px'>Topik</span> " + topic + "  </p>");
+			}
+
+			var influencer = data['influencer'].join(', ');
+			if(data['influencer'] === undefined || data['influencer'].length == 0){
+				$(".influencer").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-success' style='display:inline-block; width:150px'>Tokoh</span> Tiada  </p>");
+			} else {
+				$(".influencer").html("<p style='font-size: 18px;'><span class='badge badge-pill badge-success' style='display:inline-block; width:150px'>Tokoh</span> " + influencer + "  </p>");
+			}
+		}
+	</script>
+<!--===============================================================================================-->
+</body>
+</html>
