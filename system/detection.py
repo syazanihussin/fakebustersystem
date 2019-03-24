@@ -1,6 +1,5 @@
 from interface import implements, Interface
 from keras.models import load_model
-from keras import backend as K
 import pickle
 
 
@@ -24,8 +23,6 @@ class Detection(implements(IDetection)):
         # get probability according to its assosiated class
         class_label, fake_prob, real_prob = self.get_class_label(probabilities)
         print('CNN-GRU:', class_label, fake_prob, real_prob)
-
-        K.clear_session()
 
         cnn_gru = {'label': class_label, 'fake_prob': float(fake_prob), 'real_prob': float(real_prob) }
 

@@ -2,7 +2,7 @@ from flask import Flask, jsonify, render_template
 from system import inputprocessing, detection, extractor, search, semantic
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
-#from keras import backend as K
+from keras import backend as K
 
 app = Flask(__name__)
 
@@ -45,6 +45,8 @@ def preprocess_detect(news):
     print(news)
     detection_obj = detection.Detection()
     results = detection_obj.detect_fake_news('content', padded_texts, news)
+	
+	K.clear_session()
 	
     return results
 
@@ -109,7 +111,7 @@ def preprocess_detect_stance(news):
         detection_result = {i: {'label': label, 'fake_prob': float(fake_probability), 'real_prob': float(real_probability) }}
         detection_results.append(detection_result)
 
-        #K.clear_session()
+        K.clear_session()
 
     return detection_results
 
