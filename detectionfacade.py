@@ -14,7 +14,6 @@ def index():
 
 @app.route('/api/v1.0/detectionfacade/content-based/url/<string:url>', methods=['GET'])
 def execute_detection_url(url):
-    K.clear_session()    
     extractor_obj = extractor.Extractor()
     extracted_news = extractor_obj.extract_news(url)
     print(extracted_news)
@@ -31,7 +30,6 @@ def execute_detection_url(url):
 
 @app.route('/api/v1.0/detectionfacade/content-based/news/<string:news>', methods=['GET'])
 def execute_detection_news(news):
-    K.clear_session()    
     detection_result = preprocess_detect(news)
     ner, subjectivity, sentiment, topic, influencer = semantics(news)
     print(news)
@@ -45,10 +43,12 @@ def preprocess_detect(news):
     print(clean_news)
     news = ' '.join(clean_news)
     print(news)
-    K.clear_session()
     detection_obj = detection.Detection()
     results = detection_obj.detect_fake_news('content', padded_texts, news)
-    K.clear_session()
+    try:
+        K.clear_session()
+    except Exception as e:
+        print(e)
     return results
 
 
