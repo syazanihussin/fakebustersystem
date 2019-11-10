@@ -17,11 +17,12 @@ class Extractor(implements(IExtractor)):
         return requests.get(decoded_url).status_code
 
 #202.45.139.16
+#http://202.45.139.16/readibility/vbtext.php?base64url=
     def extract_news(self, url):
 
         if(self.check_url(url) == 200):
             try:
-                extracted_news = requests.get('http://202.45.139.16/readibility/vbtext.php?base64url=' + url).text
+                extracted_news = requests.get('http://202.45.142.95/readibility/text.php?base64url=' + url).text
                 if extracted_news == "Looks like we couldn't find the content.":
                     return 'error extract'
                 else:
