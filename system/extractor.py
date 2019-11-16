@@ -2,11 +2,11 @@ from interface import implements, Interface
 import base64, requests
 import httplib2
 
+
 class IExtractor(Interface):
 
     def extract_news(self, url):
         pass
-
 
 
 class Extractor(implements(IExtractor)):
@@ -16,12 +16,12 @@ class Extractor(implements(IExtractor)):
         decoded_url = base64.b64decode(url.encode()).decode()
         return requests.get(decoded_url).status_code
 
-#202.45.139.16
-#http://202.45.139.16/readibility/vbtext.php?base64url=
+    # 202.45.139.16
+    # http://202.45.139.16/readibility/vbtext.php?base64url=
     def extract_news(self, url):
 
-        if(self.check_url(url) == 200):
-            try:
+        if (self.check_url(url) == 200):
+            # try:
                 print('url', url)
                 path = 'http://202.45.142.95/readibility/text.php?base64url=' + url
                 print('path', path)
@@ -35,9 +35,9 @@ class Extractor(implements(IExtractor)):
                 else:
                     return extracted_news
 
-            except Exception as error:
-                print('err', str(error))
-                return 'error extract2'
+            # except:
+                # print('err', str(error))
+                # return 'error extract2'
 
         else:
             return 'invalid URL'
