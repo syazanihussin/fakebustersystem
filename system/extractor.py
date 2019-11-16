@@ -1,6 +1,6 @@
 from interface import implements, Interface
 import base64, requests
-
+import httplib2
 
 class IExtractor(Interface):
 
@@ -25,15 +25,18 @@ class Extractor(implements(IExtractor)):
                 print('url', url)
                 path = 'http://202.45.142.95/readibility/text.php?base64url=' + url
                 print('path', path)
-                extracted_news = requests.get(path)
+                # extracted_news = requests.get(path)
+                http = httplib2.Http()
+                content = http.request(path)[1]
+                extracted_news = content.decode()
                 print('extract', extracted_news)
-                # if extracted_news == "Looks like we couldn't find the content.":
-                #     return 'error extract1'
-                # else:
-                #     return extracted_news
+                if extracted_news == "Looks like we couldn't find the content.":
+                    return 'error extract1'
+                else:
+                    return extracted_news
 
             except Exception as error:
-                print('err',str(error))
+                print('err', str(error))
                 return 'error extract2'
 
         else:
