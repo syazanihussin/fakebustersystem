@@ -23,7 +23,7 @@ class Extractor(implements(IExtractor)):
         if(self.check_url(url) == 200):
             try:
                 print('url', url)
-                path = 'http://202.45.142.95/readibility/text.php?base64url=' + url;
+                path = 'http://202.45.142.95/readibility/text.php?base64url=' + url
                 print('path', path)
                 extracted_news = requests.get(path)
                 print('extract', extracted_news)
@@ -33,7 +33,7 @@ class Extractor(implements(IExtractor)):
                 #     return extracted_news
 
             except Exception as error:
-                print('err',error)
+                print('err',str(error))
                 return 'error extract2'
 
         else:
