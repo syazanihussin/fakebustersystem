@@ -21,23 +21,25 @@ class Extractor(implements(IExtractor)):
     def extract_news(self, url):
 
         if (self.check_url(url) == 200):
-            # try:
+            try:
                 print('url', url)
                 path = 'http://202.45.142.95/readibility/text.php?base64url=' + url
                 print('path', path)
                 # extracted_news = requests.get(path)
+
                 http = httplib2.Http()
                 content = http.request(path)[1]
                 extracted_news = content.decode()
                 print('extract', extracted_news)
+
                 if extracted_news == "Looks like we couldn't find the content.":
-                    return 'error extract1'
+                    return 'error extract'
                 else:
                     return extracted_news
 
-            # except:
-                # print('err', str(error))
-                # return 'error extract2'
+            except Exception as error:
+                print('err', str(error))
+                return 'error extract'
 
         else:
             return 'invalid URL'
