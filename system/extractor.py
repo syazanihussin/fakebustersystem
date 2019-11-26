@@ -27,11 +27,11 @@ class Extractor(implements(IExtractor)):
                 print('path', path)
                 # extracted_news = requests.get(path)
 
-                # http = httplib2.Http()
-                # content = http.request(path)[1]
-                # extracted_news = content.decode()
-                # print('extract', extracted_news)
-                extracted_news = 'malaysia aman dan damai'
+                http = httplib2.Http()
+                content = http.request(path)[1]
+                extracted_news = content.decode()
+                print('extract', extracted_news)
+                # extracted_news = 'malaysia aman dan damai'
 
                 if extracted_news == "Looks like we couldn't find the content.":
                     return 'error extract'
